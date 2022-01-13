@@ -25,9 +25,15 @@ def main():
                 for player in players:
                     summoner_name = player["summonerName"]
 
-                    puuid = user_extract.retrieve_puuid(summoner_name) 
+                    puuid = user_extract.retrieve_puuid(summoner_name)["puuid"]
+                    # TODO : add to the database !
                     matches = user_extract.retrieve_matches(puuid) 
-                        
+                    
+                    break 
+
+            break
+            
+        break
                 
 
 

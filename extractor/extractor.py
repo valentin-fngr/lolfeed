@@ -1,10 +1,9 @@
+from urllib import response
 import requests
 from .constant import (PUUIS_ENDPOINT, HEADERS, MATCHS_ENDPOINTS, MATCH_DETAIL_ENDPOINTS,DIVISION_ENDPOINT)
 import json
+from .decorator import request # custom decorator
 
-"""
-Interact with the riot API in order to retrieve match and user data, in order to store them in a db later
-"""
 
 
 
@@ -25,22 +24,17 @@ class LeagueExtractor:
 
         self.division_list = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINIUM", "DIAMOND"]
     
-
+    @request
     def get_players(self, tier, division, page=1, queue="RANKED_SOLO_5x5"):
-
+        """
+            browse ranked players
+        """
         endpoint = DIVISION_ENDPOINT + f"{queue}/{tier}/{self.tiers_list[division]}?page={page}"
         r = requests.get(endpoint, headers=HEADERS)
-        content = r.json()
-
-        print(content)
-
-        if r.status_code != 202:
-            msg = content["status"]["message"]
-            print(f"WARNING : request {endpoint} failed with status {r.status_code}")
-            print(f"WARNING : request failed because : {msg}")
-            
-            return None
-        return content   
+        return {
+            "response" : r, 
+            "endpoint" : endpoint
+        }
 
     
 
@@ -51,44 +45,45 @@ class UserDataExtractor:
         In short, instanciating this class will allow you to at least access summoner name and puuid
     """
 
+    @request
     def retrieve_puuid(self, summoner_name): 
         """
             retrieve a user's puuid
         """
         endpoint = PUUIS_ENDPOINT + summoner_name
         r = requests.get(endpoint, headers=HEADERS)
-        json = r.json()
+        return {
+            "response" : r, 
+            "endpoint" : endpoint
+        }
 
-        if r.status_code == 202:  
-            return r.json()      
-        else: 
-            return None       
 
+    @request
     def retrieve_matches(self, puuid): 
         """
             retrieve a user's matches (ranked only ! )
         """
-        endpoint = MATCHS_ENDPOINTS + f"{puuid}/ids?type=ranked"
+        endpoint = MATCHS_ENDPOINTS + f"{puuid}/ids?type=ranked&start=0&count=50"
         r = requests.get(endpoint, headers=HEADERS)
+        return {
+            "response" : r, 
+            "endpoint" : endpoint
+        }
 
-        if r.status_code == 202:  
-            return r.json()      
-        else: 
-            return None   
 
-
-         
 
 class MatchDataExtractor: 
     """
         A class responsible for extracting a match informations
     """
     
+    @request
     def retrieve_match_content(self, match_id): 
         endpoint = MATCH_DETAIL_ENDPOINTS + match_id
         r = requests.get(endpoint, headers=HEADERS)
+        return {
+            "response" : r, 
+            "endpoint" : endpoint
+        }
 
-        if r.status_code == 202:  
-            return r.json()      
-        else: 
-            return None           
+
