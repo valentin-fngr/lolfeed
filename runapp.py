@@ -23,12 +23,37 @@ def main():
             # extracting each player'ids 
             if players: 
                 for player in players:
+
+                    player_payload = {
+                        "wins" : player["wins"], 
+                        "losses" : player["losses"], 
+                        "inactive" : player["inactive"], 
+                        "hotStreak" : player["hotStreak"], 
+                        "tier" : player["tier"], 
+                        "rank" : player["rank"]
+                    }
+
+                
                     summoner_name = player["summonerName"]
 
                     puuid = user_extract.retrieve_puuid(summoner_name)["puuid"]
+                    
+                    player_payload["puuid"] = puuid
+
                     # TODO : add to the database !
                     matches = user_extract.retrieve_matches(puuid) 
                     
+                    if matches is not None: 
+
+                        for match in matches: 
+                            match_data = match_extractor.retrieve_match_content(match)
+                            
+
+
+
+
+                            break
+
                     break 
 
             break

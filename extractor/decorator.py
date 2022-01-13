@@ -6,7 +6,8 @@ import time
 def request(func):
     """
         The request decorator avoid code duplication and force each request to be 
-        executed after 1 sec
+        executed after 1 sec. 
+        Every failed requests will return None
     """
     @functools.wraps(func)
     def wrapper_request(*args, **kwargs):

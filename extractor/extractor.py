@@ -86,4 +86,3 @@ class MatchDataExtractor:
             "endpoint" : endpoint
         }
 
-
