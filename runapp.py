@@ -1,11 +1,17 @@
 from extractor.extractor import UserDataExtractor, LeagueExtractor, MatchDataExtractor
-from parser.parser import PlayerParser 
+from parser.parser import PlayerParser, MatchParser
 import os
 
 PLAYER_CSV_PATH = os.path.join(
     os.path.join(os.getcwd(), "dataset"),
     "player.csv"
     )
+
+
+MATCH_CSV_PATH = os.path.join(
+    os.path.join(os.getcwd(), "dataset"), 
+    "match.csv"
+)
 
 
 def main(): 
@@ -19,6 +25,7 @@ def main():
     user_extract = UserDataExtractor()
     match_extractor = MatchDataExtractor() 
     player_parser = PlayerParser(filename=PLAYER_CSV_PATH)
+    match_parser = MatchParser(filename=MATCH_CSV_PATH)
     
     divisions = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINIUM", "DIAMOND"]
     tiers = range(1,4) 
@@ -61,25 +68,33 @@ def main():
                     if matches is not None: 
 
                         for match_id in matches: 
- 
-                            player_payload["match_id"] = match_id
-                            # get full match content
+                            player_payload["matchId"] = match_id
                             match_details = match_extractor.retrieve_match_content(match_id)
-                            match_player_meta = player_parser.preprocess_content(match_details, puuid) 
-
-                            data = {**player_payload, **match_player_meta} 
-
-                            if not player_is_started: 
-                                player_parser.write_into(data.keys())
-                                player_is_started = True 
-                            # add row to player.csv
-                            player_parser.flatten_and_write(data) 
                             
-                            if not match_is_started: 
-                                # todo 
-                                pass 
-                            # check if match already in csv else add match to match.csv
+                            if match_details is not None: 
 
+                                match_player_meta = player_parser.preprocess_content(match_details, puuid) 
+
+                                player_payload = {**player_payload, **match_player_meta} 
+
+                                if not player_is_started: 
+                                    player_parser.write_into(player_payload.keys())
+                                    player_is_started = True 
+                                # add row to player.csv
+                                player_parser.flatten_and_write(player_payload) 
+                            
+
+                                if not match_is_started: 
+                                    match_payload = match_parser.preprocess_content(match_details)
+                                    match_parser.write_into(match_payload.keys())
+                                    match_is_started = True 
+                                
+                                match_parser.flatten_and_write(match_payload)
+                                    
+
+                            break
+
+                        break
 
 
                     break 

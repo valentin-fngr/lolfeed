@@ -33,7 +33,6 @@ class BaseCsvWritter:
         with open(self.filename, 'a+', newline='') as csvfile:
             current_file = csv.writer(csvfile, delimiter=",") 
             current_file.writerow(row)
-            print(row)
 
         print("successfully wrote to ", self.filename)
 
@@ -119,8 +118,25 @@ class MatchParser(CsvWritterMixin, BaseCsvWritter):
     def __init__(self, filename):
         super().__init__(filename)
 
-    def has_been_written(self, match_id): 
+
+    def preprocess_content(self, match_content):
+        """
+            extract relevant match data 
+        """
+        data = {}
+        meta = match_content["metadata"]
+        info = match_content["info"]
+        data["matchId"] = meta["matchId"]  
+        data["game_id"] = info["gameId"]
+        data["gameDuration"] = info["gameDuration"]
+        data["gameMode"] = info["gameMode"]
+        data["gameCreation"] = info["gameCreation"] 
+
+        return data        
+
+    def has_been_written(self, matchId): 
         """
             return true if the match has already been written in the csv 
             in order to avoid duplicates
         """
+        pass
