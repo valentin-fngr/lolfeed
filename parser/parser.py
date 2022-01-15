@@ -46,22 +46,12 @@ class BaseCsvWritter:
         
         
 
+
+
 class PlayerParser(CsvWritterMixin, BaseCsvWritter): 
      
     def __init__(self, filename):
         super().__init__(filename)
-
-    def get_columns(self):
-        return super().get_columns()
-
-    def write_into(self, row):
-        return super().write_into(row)
-
-    def flatten_and_write(self, row): 
-        """
-            return the values of a the content dictionarry and writes it to the file
-        """
-        return super().flatten_and_write(row)
 
     def preprocess_content(self, match_content, user_puuid):
         """
@@ -72,14 +62,15 @@ class PlayerParser(CsvWritterMixin, BaseCsvWritter):
         """
 
         data = {}
-        participants = match_content["info"]["participants"]
+        info = match_content["info"]
+        data["season"] = info["gameVersion"].split(".")[0]
+        participants = info["participants"]
         for participant in participants: 
             if participant["puuid"] == user_puuid: 
                 # extract 
                 data["champExperience"] = participant["champExperience"]
                 data["champLevel"] = participant["champLevel"]
                 data["championName"] = participant["championName"] 
-                data["damageDealtToBuildings"] = participant["damageDealtToBuildings"] 
                 data["damageDealtToObjectives"] = participant["damageDealtToObjectives"] 
                 data["damageDealtToTurrets"] = participant["damageDealtToTurrets"] 
                 data["kills"] = participant["kills"]                
@@ -114,6 +105,7 @@ class PlayerParser(CsvWritterMixin, BaseCsvWritter):
         return None
 
 
+
 class MatchParser(CsvWritterMixin, BaseCsvWritter): 
     def __init__(self, filename):
         super().__init__(filename)
@@ -128,6 +120,7 @@ class MatchParser(CsvWritterMixin, BaseCsvWritter):
         info = match_content["info"]
         data["matchId"] = meta["matchId"]  
         data["game_id"] = info["gameId"]
+        data["season"] = info["gameVersion"].split(".")[0]
         data["gameDuration"] = info["gameDuration"]
         data["gameMode"] = info["gameMode"]
         data["gameCreation"] = info["gameCreation"] 
