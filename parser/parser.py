@@ -115,3 +115,12 @@ class PlayerParser(CsvWritterMixin, BaseCsvWritter):
         return None
 
 
+class MatchParser(CsvWritterMixin, BaseCsvWritter): 
+    def __init__(self, filename):
+        super().__init__(filename)
+
+    def has_been_written(self, match_id): 
+        """
+            return true if the match has already been written in the csv 
+            in order to avoid duplicates
+        """

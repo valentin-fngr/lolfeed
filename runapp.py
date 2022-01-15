@@ -25,6 +25,7 @@ def main():
 
     # is false if the player.csv has never been open before
     player_is_started = False 
+    match_is_started = False
 
 
     
@@ -60,18 +61,26 @@ def main():
                     if matches is not None: 
 
                         for match_id in matches: 
-                            
-                            # retrieve match details
+ 
+                            player_payload["match_id"] = match_id
+                            # get full match content
                             match_details = match_extractor.retrieve_match_content(match_id)
-                            # extract related player information in the match
                             match_player_meta = player_parser.preprocess_content(match_details, puuid) 
 
                             data = {**player_payload, **match_player_meta} 
+
                             if not player_is_started: 
                                 player_parser.write_into(data.keys())
                                 player_is_started = True 
+                            # add row to player.csv
                             player_parser.flatten_and_write(data) 
-                            break
+                            
+                            if not match_is_started: 
+                                # todo 
+                                pass 
+                            # check if match already in csv else add match to match.csv
+
+
 
                     break 
 
