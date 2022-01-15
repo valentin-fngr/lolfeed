@@ -63,7 +63,7 @@ class UserDataExtractor:
         """
             retrieve a user's matches (ranked only ! )
         """
-        endpoint = MATCHS_ENDPOINTS + f"{puuid}/ids?type=ranked&start=0&count=50"
+        endpoint = MATCHS_ENDPOINTS + f"{puuid}/ids?type=ranked&start=0&count=25"
         r = requests.get(endpoint, headers=HEADERS)
         return {
             "response" : r, 
