@@ -12,7 +12,7 @@ def request(func):
     @functools.wraps(func)
     def wrapper_request(*args, **kwargs):
         # wait 
-        time.sleep(1)
+        time.sleep(0.4)
 
         value = func(*args, **kwargs)
         response, endpoint = value["response"], value["endpoint"]
