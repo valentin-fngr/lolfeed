@@ -83,26 +83,17 @@ def main():
                                 # add row to player.csv
                                 player_parser.flatten_and_write(player_payload) 
                             
+                                match_payload = match_parser.preprocess_content(match_details)
 
                                 if not match_is_started: 
-                                    match_payload = match_parser.preprocess_content(match_details)
                                     match_parser.write_into(match_payload.keys())
                                     match_is_started = True 
                                 
-                                match_parser.flatten_and_write(match_payload)
+                                is_in_csv = match_parser.is_in_csv(match_id)
+                                if not is_in_csv: 
+                                    match_parser.flatten_and_write(match_payload)
                                     
 
-                            break
-
-                        break
-
-
-                    break 
-
-            break
-            
-        break
-                
 
 
 if __name__ == "__main__":

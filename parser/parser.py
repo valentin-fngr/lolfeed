@@ -134,9 +134,17 @@ class MatchParser(CsvWritterMixin, BaseCsvWritter):
 
         return data        
 
-    def has_been_written(self, matchId): 
+    def is_in_csv(self, matchId): 
         """
             return true if the match has already been written in the csv 
             in order to avoid duplicates
         """
-        pass
+        # counter allows us to avoid checking the first row, which contains the name of each column
+        counter = 0
+        with open(self.filename, newline='') as csvfile:
+            file_content = csv.reader(csvfile, delimiter=",") 
+            for row in file_content: 
+                if counter != 0: 
+                    if row[0] == matchId: 
+                        return True 
+        return False
