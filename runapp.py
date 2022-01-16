@@ -40,7 +40,7 @@ def main():
     for i in range(len(divisions)): 
         for j in range(len(tiers)): 
             
-            players = league_extractor.get_players(divisions[0], str(tiers[0]))
+            players = league_extractor.get_players(divisions[i], str(tiers[j]))
             
             # extracting each player'ids 
             if players: 
