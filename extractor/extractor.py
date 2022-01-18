@@ -22,7 +22,7 @@ class LeagueExtractor:
             "4" : "IV"
         }
 
-        self.division_list = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINIUM", "DIAMOND"]
+        self.division_list = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND"]
     
     @request
     def get_players(self, tier, division, page=1, queue="RANKED_SOLO_5x5"):

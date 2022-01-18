@@ -27,17 +27,17 @@ def main():
     player_parser = PlayerParser(filename=PLAYER_CSV_PATH)
     match_parser = MatchParser(filename=MATCH_CSV_PATH)
     
-    divisions = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINIUM", "DIAMOND"]
-    tiers = range(1,4) 
+    divisions = ["IRON", "BRONZE", "SILVER", "GOLD", "PLATINUM", "DIAMOND"]
+    tiers = range(1,5) 
 
     # is false if the player.csv has never been open before
-    player_is_started = False 
-    match_is_started = False
+    player_is_started = True 
+    match_is_started = True
 
 
     
     # iterating over all divisions, tiers 
-    for i in range(len(divisions)): 
+    for i in range(4, len(divisions)): 
         for j in range(len(tiers)): 
             
             players = league_extractor.get_players(divisions[i], str(tiers[j]))
